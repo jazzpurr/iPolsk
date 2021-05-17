@@ -12,7 +12,7 @@ Playback happens in the form of a timer running on the common thread at a freque
 
 I then played around with tweaks and settings to make it sound even better, such as a second violin playing along automatically and leading notes to alleviate larger chord transitions.
 
-A polska is a scandinavian dance music tradition btw, chosen partly for it's very rigid structure. Here's an example
+A polska is a scandinavian dance music tradition btw, I chose it largerly for it's very rigid structure. Here's an example
 https://www.youtube.com/watch?v=wVx5RJojwnA
 
 
