@@ -1,5 +1,5 @@
 # iPolsk
-A customizable polska generator written in Swift for iOS using SwiftUI and CoreAudio.
+A customizable polska generator written in Swift for iOS using SwiftUI and CoreAudio. Tested on iPhone 11
 
 My initial approach was to use markov chains to transition between note states and applying constraints to direct the output into a nice direction.
 This sort of worked, but it sounded too incoherent. I came to a realization that repetition is to some extent important, and thus came about my second approach.
