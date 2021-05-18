@@ -248,6 +248,7 @@ class PolskaPlayer: NSObject {
         let wasPlaying = playing
         stop()
         latestBarData = barViewData
+        latestChordData = latestSong.chordDictionary[barViewData.chordId]!.viewData
         loopType = LoopType.bar
         if wasPlaying {
             play()

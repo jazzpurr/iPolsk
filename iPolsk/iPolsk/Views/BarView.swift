@@ -14,8 +14,8 @@ struct BarView: View {
     var player : PolskaPlayer
     
     @State private var playing = false
-    @State private var chord = Chord()
     @State private var data = Bar.ViewData()
+    @State private var chordName = ""
     @State private var presentAllChordsView = false
     @State private var showingAlert = false
     
@@ -24,7 +24,7 @@ struct BarView: View {
             Section(header: Text("Chord")) {
                 NavigationLink(
                     destination: ChordView(chord: binding(bar.chordId), player: player)) {
-                    Label("Edit bar chord", systemImage: "music.note.list")
+                    Label("Edit bar chord \(chordName)", systemImage: "music.note.list")
                         .font(.headline)
                 }
                 HStack {
@@ -38,14 +38,15 @@ struct BarView: View {
             }
             Section(header: Text("Fixed pattern")) {
                 if data.patterns.count != 0 {
-                    ForEach(0 ..< data.patterns.count, id:\.self) { i in // we only have 1, this is for consistent list removal
+                    ForEach(data.patterns, id:\.self) { pattern in // we only have 1, this is for consistent list removal
                         NavigationLink(destination: PatternView(pattern: $data.patterns[0], player: player)) {
-                            Label(data.patterns[0].name, systemImage: "smallcircle.circle")
+                            Label(pattern.name, systemImage: "smallcircle.circle")
                                 .font(.system(size: 25, design: .monospaced))
                         }
                     }
                     .onDelete { _ in
                         data.patterns = []
+                        bar.update(data)
                         player.prepareBarLoop(data)
                     }
                 }
@@ -55,6 +56,7 @@ struct BarView: View {
                         Spacer()
                         Button(action: {
                             data.patterns = [Pattern()]
+                            bar.update(data)
                             player.prepareBarLoop(data)
                         }) {
                             Image(systemName: "plus.circle.fill")
@@ -65,7 +67,7 @@ struct BarView: View {
         }
         .onAppear {
             data = bar.viewData
-            chord = song.chordDictionary[data.chordId]!
+            chordName = song.chordDictionary[data.chordId]!.name
             playing = player.isPlaying()
             player.prepareBarLoop(data)
         }
@@ -92,6 +94,9 @@ struct BarView: View {
                             Image(systemName: "play")
                         }
                     })
+                    .onDisappear {
+                        chordName = song.chordDictionary[data.chordId]!.name
+                    }
                 
             }
         }
@@ -106,7 +111,7 @@ struct BarView: View {
                     Alert(title: Text("T H E    B A R"), message: Text("In this view you can choose which chord the bar should use. A chord consists of patterns, so the bar will randomly pick one of the patterns in the chord. If you have something specific in mind you can set a fixed pattern instead, which the bar will then always play. It keeps the base note of the chord however."), dismissButton: .default(Text("Got it!")))
                 }
                 Button(action: {
-                    player.prepareSongLoop(song)
+                    player.prepareBarLoop(data)
                     player.togglePlaying()
                     playing = !playing
                 })

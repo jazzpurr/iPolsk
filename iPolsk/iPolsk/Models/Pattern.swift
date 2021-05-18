@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Pattern: Identifiable, Codable, Equatable {
+struct Pattern: Identifiable, Codable, Equatable, Hashable {
     let id: UUID
     var name: String = ""
     var scaleOffsets: [[Int]]

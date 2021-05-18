@@ -22,7 +22,7 @@ struct ChordView: View {
             Section(header: Text("Patterns")) {
                 ForEach(data.patterns.indices, id:\.self) { i in
                     NavigationLink(destination: PatternView(pattern: $data.patterns[i], player: player)) {
-                        Label(data.patterns[i].name, systemImage: "smallcircle.circle")
+                        Label(getPatternNameSafely(i), systemImage: "smallcircle.circle")
                             .font(.system(size: 25, design: .monospaced))
                     }
                 }
@@ -31,6 +31,7 @@ struct ChordView: View {
                     if data.patterns.count == 0 {
                         data.patterns.append(Pattern()) // won't allow empty list
                     }
+                    player.prepareChordLoop(data)
                 }
                 
                 HStack {
@@ -91,5 +92,15 @@ struct ChordView: View {
                 }
             }
         )
+    }
+    
+    private func getPatternNameSafely(_ i: Int) -> String {
+        // so after removal retrieval at index can fail
+        if i >= self.data.patterns.count {
+            return "" // safeguard for intermediate state
+        }
+        else {
+            return data.patterns[i].name
+        }
     }
 }
